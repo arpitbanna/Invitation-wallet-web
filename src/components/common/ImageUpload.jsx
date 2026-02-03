@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Upload, X, Plus } from 'lucide-react';
 import './ImageUpload.css';
 
@@ -11,8 +11,8 @@ const ImageUpload = ({ onImagesSelect, initialImages = [] }) => {
 
         // Filter large files
         const validFiles = files.filter(file => {
-            if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                alert(`File ${file.name} is too large (max 5MB). Skipped.`);
+            if (file.size > 800 * 1024) { // 800KB limit for localStorage
+                alert(`File ${file.name} is too large. Please use images under 800KB.`);
                 return false;
             }
             return true;
@@ -53,7 +53,7 @@ const ImageUpload = ({ onImagesSelect, initialImages = [] }) => {
     };
 
     // Update previews if initialImages changes (e.g. when editing loads data)
-    React.useEffect(() => {
+    useEffect(() => {
         if (initialImages && initialImages.length > 0 && previews.length === 0) {
             setPreviews(initialImages);
         }

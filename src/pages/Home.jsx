@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useEvents } from '../context/EventsContext';
+import { useLanguage } from '../context/LanguageContext';
 import EventCard from '../components/features/EventCard';
 import { NavLink, Link } from 'react-router-dom';
 import { Plus, Settings as SettingsIcon } from 'lucide-react';
@@ -7,6 +8,7 @@ import './Home.css';
 
 const Home = () => {
     const { events } = useEvents();
+    const { t } = useLanguage();
 
     // --- Derived State: Sort & Filter Events ---
     const { upcomingEvents, pastEvents } = useMemo(() => {
@@ -18,6 +20,8 @@ const Home = () => {
 
         events.forEach(event => {
             // Parse YYYY-MM-DD to local midnight for accurate comparison
+            if (!event.date || typeof event.date !== 'string') return;
+
             const [y, m, d] = event.date.split('-').map(Number);
             const dateObj = new Date(y, m - 1, d);
 
@@ -63,7 +67,7 @@ const Home = () => {
             ) : (
                 <div className="event-lists-container">
                     <section className="event-section">
-                        <h2 className="section-title">Upcoming</h2>
+                        <h2 className="section-title">{t('upcoming_events')}</h2>
                         {upcomingEvents.length > 0 ? (
                             <div className="event-list">
                                 {upcomingEvents.map(event => (
@@ -71,13 +75,13 @@ const Home = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="section-empty">No upcoming events.</p>
+                            <p className="section-empty">{t('no_upcoming')}</p>
                         )}
                     </section>
 
                     {pastEvents.length > 0 && (
                         <section className="event-section past-section">
-                            <h2 className="section-title">Past Events</h2>
+                            <h2 className="section-title">{t('past_events')}</h2>
                             <div className="event-list">
                                 {pastEvents.map(event => (
                                     <EventCard key={event.id} event={event} />

@@ -12,8 +12,14 @@ const EventCard = ({ event }) => {
 
     // Format Date: "Mon, Oct 24"
     const formatDate = (dateString) => {
-        const options = { weekday: 'short', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('en-US', options);
+        if (!dateString) return '';
+        try {
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            const date = new Date(dateString);
+            return isNaN(date.getTime()) ? dateString : date.toLocaleDateString('en-US', options);
+        } catch (e) {
+            return dateString;
+        }
     };
 
     return (

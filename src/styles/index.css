@@ -2,71 +2,64 @@
   /* Default: Dark Theme (Slate) */
   --color-bg: #0f172a;
   --color-surface: #1e293b;
-  --color-surface-hover: #334155;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  /* Variable for glass background */
 
   --color-primary: #3b82f6;
   --color-primary-glow: rgba(59, 130, 246, 0.5);
-
   --color-accent: #f43f5e;
-
   --color-text-main: #f8fafc;
   --color-text-muted: #94a3b8;
 
   --font-main: 'Outfit', sans-serif;
-
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  /* Adjusted Alpha */
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 15px var(--color-primary-glow);
 }
 
-/* Light Theme Override */
+/* Light Theme */
 [data-theme='light'] {
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  /* Much lighter */
 
   --color-primary: #2563eb;
   --color-primary-glow: rgba(37, 99, 235, 0.2);
-
   --color-accent: #e11d48;
-
   --color-text-main: #0f172a;
   --color-text-muted: #64748b;
 }
 
-/* Ocean Theme Override (Deep Blue) */
+/* Ocean Theme (Deep Blue/Cyan) */
 [data-theme='ocean'] {
-  --color-bg: #0c4a6e;
-  --color-surface: #075985;
-  --color-surface-hover: #0369a1;
+  --color-bg: #022c22;
+  /* Dark Teal/Cyan mix for difference */
+  --color-surface: #115e59;
+  --glass-bg: rgba(13, 71, 161, 0.6);
+  /* Distinct Blue */
 
-  --color-primary: #38bdf8;
-  /* Sky Blue */
-  --color-primary-glow: rgba(56, 189, 248, 0.5);
-
-  --color-text-main: #f0f9ff;
-  --color-text-muted: #bae6fd;
+  --color-primary: #22d3ee;
+  /* Cyan */
+  --color-primary-glow: rgba(34, 211, 238, 0.5);
+  --color-text-main: #ecfeff;
+  --color-text-muted: #b9e6fe;
 }
 
-/* Sunset Theme Override (Warm) */
+/* Sunset Theme (Warm Red/Orange) */
 [data-theme='sunset'] {
-  --color-bg: #4c0519;
-  --color-surface: #881337;
-  --color-surface-hover: #9f1239;
+  --color-bg: #450a0a;
+  /* Deep Red */
+  --color-surface: #7f1d1d;
+  --glass-bg: rgba(153, 27, 27, 0.6);
+  /* Red Glass */
 
-  --color-primary: #fb7185;
-  /* Rose */
-  --color-primary-glow: rgba(251, 113, 133, 0.5);
-
-  --color-text-main: #fff1f2;
-  --color-text-muted: #fecdd3;
+  --color-primary: #fdba74;
+  /* Orange */
+  --color-primary-glow: rgba(253, 186, 116, 0.5);
+  --color-text-main: #fff7ed;
+  --color-text-muted: #fed7aa;
 }
-
 
 * {
   box-sizing: border-box;
@@ -84,38 +77,19 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
-  /* Smooth toggle */
-}
-
-/* Smooth toggle */
 }
 
 /* --- Glassmorphism Utilities --- */
 .glass-panel {
-  background: var(--color-surface);
-  /* Fallback/Base */
-  /* For Glass effect to work on Light mode, we need generic rgba that adapts or simply use variable opacity */
-  background: rgba(30, 41, 59, 0.7);
-  /* Default Dark Glass */
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Adjust glass for Light mode */
 [data-theme='light'] .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-/* Adjust glass for Ocean/Sunset */
-[data-theme='ocean'] .glass-panel {
-  background: rgba(7, 89, 133, 0.6);
-}
-
-[data-theme='sunset'] .glass-panel {
-  background: rgba(136, 19, 55, 0.6);
 }
 
 

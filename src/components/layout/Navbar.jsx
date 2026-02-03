@@ -1,9 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Plus, Calendar } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import './Navbar.css';
 
 const Navbar = () => {
+    const { t } = useLanguage();
     return (
         <nav className="navbar glass-panel">
             <ul className="nav-list">
@@ -12,7 +14,7 @@ const Navbar = () => {
                         <div className="nav-icon-wrapper">
                             <Home size={24} />
                         </div>
-                        <span>Home</span>
+                        <span>{t('home')}</span>
                     </NavLink>
                 </li>
                 <li>
@@ -27,7 +29,7 @@ const Navbar = () => {
                         <div className="nav-icon-wrapper">
                             <Calendar size={24} />
                         </div>
-                        <span>Calendar</span>
+                        <span>{t('calendar')}</span>
                     </NavLink>
                 </li>
             </ul>

@@ -151,3 +151,26 @@ input:checked+.slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* --- Language Toggle --- */
+.language-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.lang-btn {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.lang-btn.active {
+    background: var(--color-primary-glow);
+    color: var(--color-primary);
+    border-color: rgba(59, 130, 246, 0.3);
+}

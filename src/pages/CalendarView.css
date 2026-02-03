@@ -12,6 +12,22 @@
     margin: 0;
 }
 
+.month-display {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.month-display:hover {
+    background: var(--color-surface-hover);
+}
+
+
 .nav-btn {
     background: transparent;
     color: var(--color-primary);

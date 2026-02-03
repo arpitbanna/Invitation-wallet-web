@@ -1,6 +1,7 @@
 .event-card {
     display: flex;
-    height: 120px;
+    min-height: 120px;
+    /* Allow expansion */
     border-radius: var(--radius-md);
     margin-bottom: 16px;
     overflow: hidden;
@@ -14,7 +15,7 @@
 
 .card-image {
     width: 120px;
-    height: 100%;
+    /* Height handled by flex stretch */
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
@@ -30,13 +31,25 @@
 
 .card-title {
     font-size: 1.125rem;
+    line-height: 1.6;
     margin-bottom: 8px;
+    margin-top: 0;
     color: var(--color-text-main);
-    /* Truncate text */
-    white-space: nowrap;
+
+    /* Robust Truncation */
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* For existing browsers */
+    line-clamp: 1;
+    /* Standard property for future compatibility */
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    white-space: normal;
+    /* Required for line-clamp */
+
+    padding-top: 6px;
+    /* Extra space for ascenders */
+    padding-bottom: 2px;
 }
 
 .card-details {

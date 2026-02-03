@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useEvents } from '../context/EventsContext';
+import { useLanguage } from '../context/LanguageContext';
 import EventCard from '../components/features/EventCard';
-import { ChevronLeft, ChevronRight, Calendar as CalIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './CalendarView.css';
 
 const CalendarView = () => {
     const { events } = useEvents();
+    const { language, t } = useLanguage();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const datePickerRef = useRef(null);
 
     // Helper to get days in month
     const getDaysInMonth = (year, month) => {
@@ -24,6 +27,9 @@ const CalendarView = () => {
 
     const daysInMonth = getDaysInMonth(year, month);
     const firstDay = getFirstDayOfMonth(year, month);
+
+    // Locale for date formatting
+    const locale = language === 'hi' ? 'hi-IN' : 'en-US';
 
     // Generate calendar grid
     const renderCalendarDays = () => {
@@ -77,18 +83,37 @@ const CalendarView = () => {
     const selectedDateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
     const selectedEvents = events.filter(e => e.date === selectedDateStr);
 
+    // Get Weekdays dynamically
+    const weekdays = t('weekdays_short').split(',');
+
     return (
         <div className="container">
             <header className="calendar-header glass-panel">
                 <button onClick={() => changeMonth(-1)} className="nav-btn"><ChevronLeft /></button>
-                <h2>{currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
+                <div
+                    className="month-display"
+                    onClick={() => datePickerRef.current.showPicker ? datePickerRef.current.showPicker() : datePickerRef.current.click()}
+                >
+                    <h2>{currentDate.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}</h2>
+                    <input
+                        type="month"
+                        ref={datePickerRef}
+                        onChange={(e) => {
+                            if (e.target.value) {
+                                const [y, m] = e.target.value.split('-');
+                                setCurrentDate(new Date(parseInt(y), parseInt(m) - 1, 1));
+                            }
+                        }}
+                        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1 }}
+                    />
+                </div>
                 <button onClick={() => changeMonth(1)} className="nav-btn"><ChevronRight /></button>
             </header>
 
             <div className="calendar-grid-wrapper glass-panel">
                 <div className="weekdays">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                        <div key={day} className="weekday">{day}</div>
+                    {weekdays.map((day, index) => (
+                        <div key={index} className="weekday">{day}</div>
                     ))}
                 </div>
                 <div className="calendar-days">
@@ -97,7 +122,7 @@ const CalendarView = () => {
             </div>
 
             <div className="selected-day-events">
-                <h3>{selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h3>
+                <h3>{selectedDate.toLocaleDateString(locale, { weekday: 'long', month: 'long', day: 'numeric' })}</h3>
                 {selectedEvents.length > 0 ? (
                     <div className="day-events-list">
                         {selectedEvents.map(event => (
@@ -106,7 +131,7 @@ const CalendarView = () => {
                     </div>
                 ) : (
                     <div className="no-events-day">
-                        <p>No events today</p>
+                        <p>{language === 'hi' ? 'आज कोई कार्यक्रम नहीं है' : 'No events today'}</p>
                     </div>
                 )}
             </div>

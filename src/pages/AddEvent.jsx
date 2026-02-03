@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEvents } from '../context/EventsContext';
+import { useLanguage } from '../context/LanguageContext';
+import { useToast } from '../context/ToastContext';
 import ImageUpload from '../components/common/ImageUpload';
 import './AddEvent.css';
 
@@ -8,6 +10,8 @@ const AddEvent = () => {
     const navigate = useNavigate();
     const { id } = useParams(); // Check if we are editing
     const { addEvent, getEventById, updateEvent } = useEvents();
+    const { t } = useLanguage();
+    const { showToast } = useToast();
 
     // --- Form State ---
     const [formData, setFormData] = useState({
@@ -27,7 +31,6 @@ const AddEvent = () => {
         if (isEditing) {
             const eventToEdit = getEventById(id);
             if (eventToEdit) {
-                // Compatible with old data structure (image string vs images array)
                 const existingImages = eventToEdit.images || (eventToEdit.image ? [eventToEdit.image] : []);
 
                 setFormData({
@@ -39,7 +42,7 @@ const AddEvent = () => {
                     images: existingImages
                 });
             } else {
-                alert("Event not found!");
+                showToast("Event not found!", 'error');
                 navigate('/');
             }
         }
@@ -59,7 +62,7 @@ const AddEvent = () => {
         e.preventDefault();
 
         if (!formData.date) {
-            alert("Please select a Date for the event.");
+            showToast("Please select a Date", 'error');
             return;
         }
 
@@ -85,7 +88,7 @@ const AddEvent = () => {
 
     return (
         <div className="container">
-            <h2 className="page-title">{isEditing ? 'Edit Invitation' : 'New Invitation'}</h2>
+            <h2 className="page-title">{isEditing ? t('edit_invitation') : t('new_invitation')}</h2>
 
             <form onSubmit={handleSubmit} className="add-event-form">
                 <ImageUpload
@@ -94,20 +97,20 @@ const AddEvent = () => {
                 />
 
                 <div className="form-group">
-                    <label>Event Title</label>
+                    <label>{t('event_title')}</label>
                     <input
                         type="text"
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                        placeholder="e.g. John's Birthday"
+                        placeholder={t('title_placeholder')}
                         className="input-field glass-panel"
                     />
                 </div>
 
                 <div className="form-row">
                     <div className="form-group half">
-                        <label>Date</label>
+                        <label>{t('date')}</label>
                         <input
                             type="date"
                             name="date"
@@ -119,7 +122,7 @@ const AddEvent = () => {
                     </div>
 
                     <div className="form-group half">
-                        <label>Time</label>
+                        <label>{t('time')}</label>
                         <input
                             type="time"
                             name="time"
@@ -131,31 +134,31 @@ const AddEvent = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Location (Optional)</label>
+                    <label>{t('location')}</label>
                     <input
                         type="text"
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
-                        placeholder="e.g. Central Park"
+                        placeholder={t('loc_placeholder')}
                         className="input-field glass-panel"
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Remark (Optional)</label>
+                    <label>{t('remark')}</label>
                     <textarea
                         name="remarks"
                         value={formData.remarks}
                         onChange={handleChange}
-                        placeholder="e.g. Bring a gift, Dress code: Casual"
+                        placeholder={t('remark_placeholder')}
                         className="input-field glass-panel"
                         rows="3"
                     />
                 </div>
 
                 <button type="submit" className="save-button" disabled={loading}>
-                    {loading ? 'Saving...' : (isEditing ? 'Update Invitation' : 'Save Invitation')}
+                    {loading ? t('saving') : (isEditing ? t('update_btn') : t('save_btn'))}
                 </button>
             </form>
         </div>
